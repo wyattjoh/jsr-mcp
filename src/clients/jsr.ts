@@ -16,6 +16,7 @@ import type {
   User,
 } from "../types/jsr.ts";
 import type { PaginatedResponse } from "../types/mcp.ts";
+import deno from "../../deno.json" with { type: "json" };
 
 export interface JSRConfig {
   readonly apiUrl: string;
@@ -44,7 +45,9 @@ async function makeApiRequest<T>(
 
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
-    ...options.headers as Record<string, string>,
+    "User-Agent":
+      `jsr-mcp/${deno.version}; https://github.com/wyattjoh/jsr-mcp`,
+    ...(options.headers as Record<string, string>),
   };
 
   if (config.apiToken) {
@@ -82,8 +85,10 @@ async function makeRegistryRequest<T>(
   const url = `${config.registryUrl}${endpoint}`;
 
   const headers: Record<string, string> = {
-    "Accept": "application/json",
-    ...options.headers as Record<string, string>,
+    Accept: "application/json",
+    "User-Agent":
+      `jsr-mcp/${deno.version}; https://github.com/wyattjoh/jsr-mcp`,
+    ...(options.headers as Record<string, string>),
   };
 
   try {
@@ -178,18 +183,15 @@ export async function listPackageVersions(
     params.set("page", String(page));
   }
 
-  const response = await makeApiRequest<{
-    items: JSRVersionResponse[];
-    total: number;
-  }>(
+  const response = await makeApiRequest<JSRVersionResponse[]>(
     config,
     `/scopes/${scope}/packages/${name}/versions?${params.toString()}`,
   );
 
   return {
-    data: response.items,
-    total: response.total,
-    returned: response.items.length,
+    data: response,
+    total: response.length, // Note: API doesn't provide total count
+    returned: response.length,
     skip: page ? (page - 1) * (limit || 20) : 0,
     limit,
   };
@@ -200,10 +202,7 @@ export async function getScope(
   config: JSRConfig,
   scope: string,
 ): Promise<JSRScopeResponse> {
-  return await makeApiRequest<JSRScopeResponse>(
-    config,
-    `/scopes/${scope}`,
-  );
+  return await makeApiRequest<JSRScopeResponse>(config, `/scopes/${scope}`);
 }
 
 // List packages in a scope
@@ -227,10 +226,7 @@ export async function listScopePackages(
   const response = await makeApiRequest<{
     items: JSRPackageResponse[];
     total: number;
-  }>(
-    config,
-    `/scopes/${scope}/packages?${params.toString()}`,
-  );
+  }>(config, `/scopes/${scope}/packages?${params.toString()}`);
 
   return {
     data: response.items,
@@ -252,10 +248,7 @@ export async function getPackageMetadata(
   latest: string;
   versions: Record<string, unknown>;
 }> {
-  return await makeRegistryRequest(
-    config,
-    `/@${scope}/${name}/meta.json`,
-  );
+  return await makeRegistryRequest(config, `/@${scope}/${name}/meta.json`);
 }
 
 // List all packages
@@ -367,10 +360,7 @@ export async function getCurrentUserScopeMember(
   config: JSRConfig,
   scope: string,
 ): Promise<ScopeMember> {
-  return await makeApiRequest<ScopeMember>(
-    config,
-    `/user/member/${scope}`,
-  );
+  return await makeApiRequest<ScopeMember>(config, `/user/member/${scope}`);
 }
 
 // List current user's invites
@@ -443,30 +433,25 @@ export async function createScope(
   scope: string,
   description?: string | undefined,
 ): Promise<JSRScopeResponse> {
-  return await makeApiRequest<JSRScopeResponse>(
-    config,
-    `/scopes`,
-    {
-      method: "POST",
-      body: JSON.stringify({ scope, description }),
-    },
-  );
+  return await makeApiRequest<JSRScopeResponse>(config, `/scopes`, {
+    method: "POST",
+    body: JSON.stringify({ scope, description }),
+  });
 }
 
 // Update scope
 export async function updateScope(
   config: JSRConfig,
   scope: string,
-  updates: { ghActionsVerifyActor?: boolean | undefined; requirePublishingFromCI?: boolean | undefined },
+  updates: {
+    ghActionsVerifyActor?: boolean | undefined;
+    requirePublishingFromCI?: boolean | undefined;
+  },
 ): Promise<JSRScopeResponse> {
-  return await makeApiRequest<JSRScopeResponse>(
-    config,
-    `/scopes/${scope}`,
-    {
-      method: "PATCH",
-      body: JSON.stringify(updates),
-    },
-  );
+  return await makeApiRequest<JSRScopeResponse>(config, `/scopes/${scope}`, {
+    method: "PATCH",
+    body: JSON.stringify(updates),
+  });
 }
 
 // Delete scope
@@ -474,13 +459,9 @@ export async function deleteScope(
   config: JSRConfig,
   scope: string,
 ): Promise<void> {
-  await makeApiRequest<void>(
-    config,
-    `/scopes/${scope}`,
-    {
-      method: "DELETE",
-    },
-  );
+  await makeApiRequest<void>(config, `/scopes/${scope}`, {
+    method: "DELETE",
+  });
 }
 
 // Add scope member
@@ -489,14 +470,10 @@ export async function addScopeMember(
   scope: string,
   githubLogin: string,
 ): Promise<ScopeInvite> {
-  return await makeApiRequest<ScopeInvite>(
-    config,
-    `/scopes/${scope}/members`,
-    {
-      method: "POST",
-      body: JSON.stringify({ githubLogin }),
-    },
-  );
+  return await makeApiRequest<ScopeInvite>(config, `/scopes/${scope}/members`, {
+    method: "POST",
+    body: JSON.stringify({ githubLogin }),
+  });
 }
 
 // Update scope member
@@ -522,13 +499,9 @@ export async function removeScopeMember(
   scope: string,
   userId: string,
 ): Promise<void> {
-  await makeApiRequest<void>(
-    config,
-    `/scopes/${scope}/members/${userId}`,
-    {
-      method: "DELETE",
-    },
-  );
+  await makeApiRequest<void>(config, `/scopes/${scope}/members/${userId}`, {
+    method: "DELETE",
+  });
 }
 
 // Delete scope invite
@@ -537,13 +510,9 @@ export async function deleteScopeInvite(
   scope: string,
   userId: string,
 ): Promise<void> {
-  await makeApiRequest<void>(
-    config,
-    `/scopes/${scope}/invites/${userId}`,
-    {
-      method: "DELETE",
-    },
-  );
+  await makeApiRequest<void>(config, `/scopes/${scope}/invites/${userId}`, {
+    method: "DELETE",
+  });
 }
 
 // Create package
@@ -590,13 +559,9 @@ export async function deletePackage(
   scope: string,
   name: string,
 ): Promise<void> {
-  await makeApiRequest<void>(
-    config,
-    `/scopes/${scope}/packages/${name}`,
-    {
-      method: "DELETE",
-    },
-  );
+  await makeApiRequest<void>(config, `/scopes/${scope}/packages/${name}`, {
+    method: "DELETE",
+  });
 }
 
 // Create package version (file upload)
@@ -609,7 +574,7 @@ export async function createPackageVersion(
   tarballData: ArrayBuffer,
 ): Promise<PublishingTask> {
   const params = new URLSearchParams({ config: configPath });
-  
+
   return await makeApiRequest<PublishingTask>(
     config,
     `/scopes/${scope}/packages/${name}/versions/${version}?${params.toString()}`,
@@ -646,13 +611,9 @@ export async function acceptScopeInvite(
   config: JSRConfig,
   scope: string,
 ): Promise<ScopeMember> {
-  return await makeApiRequest<ScopeMember>(
-    config,
-    `/user/invites/${scope}`,
-    {
-      method: "POST",
-    },
-  );
+  return await makeApiRequest<ScopeMember>(config, `/user/invites/${scope}`, {
+    method: "POST",
+  });
 }
 
 // Decline scope invite
@@ -660,13 +621,9 @@ export async function declineScopeInvite(
   config: JSRConfig,
   scope: string,
 ): Promise<void> {
-  await makeApiRequest<void>(
-    config,
-    `/user/invites/${scope}`,
-    {
-      method: "DELETE",
-    },
-  );
+  await makeApiRequest<void>(config, `/user/invites/${scope}`, {
+    method: "DELETE",
+  });
 }
 
 // Create authorization
@@ -687,14 +644,10 @@ export async function createAuthorization(
     exchangeToken: string;
     pollInterval: number;
     expiresAt: string;
-  }>(
-    config,
-    `/authorizations`,
-    {
-      method: "POST",
-      body: JSON.stringify({ challenge, permissions }),
-    },
-  );
+  }>(config, `/authorizations`, {
+    method: "POST",
+    body: JSON.stringify({ challenge, permissions }),
+  });
 }
 
 // Get authorization details
@@ -713,13 +666,9 @@ export async function approveAuthorization(
   config: JSRConfig,
   code: string,
 ): Promise<void> {
-  await makeApiRequest<void>(
-    config,
-    `/authorizations/approve/${code}`,
-    {
-      method: "POST",
-    },
-  );
+  await makeApiRequest<void>(config, `/authorizations/approve/${code}`, {
+    method: "POST",
+  });
 }
 
 // Deny authorization
@@ -727,13 +676,9 @@ export async function denyAuthorization(
   config: JSRConfig,
   code: string,
 ): Promise<void> {
-  await makeApiRequest<void>(
-    config,
-    `/authorizations/deny/${code}`,
-    {
-      method: "POST",
-    },
-  );
+  await makeApiRequest<void>(config, `/authorizations/deny/${code}`, {
+    method: "POST",
+  });
 }
 
 // Exchange authorization code
@@ -748,14 +693,10 @@ export async function exchangeAuthorizationCode(
   return await makeApiRequest<{
     token: string;
     user: User;
-  }>(
-    config,
-    `/authorizations/exchange`,
-    {
-      method: "POST",
-      body: JSON.stringify({ exchangeToken, verifier }),
-    },
-  );
+  }>(config, `/authorizations/exchange`, {
+    method: "POST",
+    body: JSON.stringify({ exchangeToken, verifier }),
+  });
 }
 
 // Test connection to JSR API
@@ -773,4 +714,3 @@ export async function testConnection(
     };
   }
 }
-

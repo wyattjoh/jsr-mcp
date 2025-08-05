@@ -23,7 +23,7 @@ The codebase follows a modular architecture:
 - **Entry point**: `src/index.ts` - Sets up the MCP server, handles stdio transport, and routes tool requests
 - **JSR client**: `src/clients/jsr.ts` - Handles all HTTP communication with JSR API and Registry endpoints
 - **Tool definitions**: `src/tools/jsr-tools.ts` - Defines available MCP tools and handles tool execution
-- **Type definitions**: 
+- **Type definitions**:
   - `src/types/jsr.ts` - JSR API response types and validation schemas
   - `src/types/mcp.ts` - MCP-specific types
 

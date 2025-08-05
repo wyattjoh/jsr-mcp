@@ -30,7 +30,15 @@ Add to your MCP servers configuration using the JSR package:
   "mcpServers": {
     "jsr": {
       "command": "deno",
-      "args": ["run", "--allow-all", "jsr:@wyattjoh/jsr-mcp"],
+      "args": [
+        "run",
+        "--allow-read",
+        "--allow-write",
+        "--allow-env",
+        "--allow-run",
+        "--allow-net",
+        "jsr:@wyattjoh/jsr-mcp"
+      ],
       "env": {
         "JSR_API_TOKEN": "your-jsr-api-token"
       }
@@ -48,7 +56,11 @@ Add to your MCP servers configuration using the JSR package:
       "command": "deno",
       "args": [
         "run",
-        "--allow-all",
+        "--allow-read",
+        "--allow-write",
+        "--allow-env",
+        "--allow-run",
+        "--allow-net",
         "https://raw.githubusercontent.com/wyattjoh/jsr-mcp/main/src/index.ts"
       ],
       "env": {
@@ -81,7 +93,15 @@ Add to your MCP servers configuration using the JSR package:
   "mcpServers": {
     "jsr": {
       "command": "deno",
-      "args": ["run", "--allow-all", "jsr:@wyattjoh/jsr-mcp"],
+      "args": [
+        "run",
+        "--allow-read",
+        "--allow-write",
+        "--allow-env",
+        "--allow-run",
+        "--allow-net",
+        "jsr:@wyattjoh/jsr-mcp"
+      ],
       "env": {
         "JSR_API_TOKEN": "your-jsr-api-token"
       }
@@ -287,6 +307,7 @@ The server supports the following environment variables:
 Once configured, you can interact with JSR through your AI assistant:
 
 ### Basic Package Operations
+
 - "Search for packages related to testing"
 - "Show me information about the @std/testing package"
 - "List all versions of @oak/oak"
@@ -294,22 +315,26 @@ Once configured, you can interact with JSR through your AI assistant:
 - "Get details about version 1.0.0 of @luca/flag"
 
 ### Package Analysis
+
 - "What's the quality score of @std/fs?"
 - "Show me packages that depend on @oak/oak"
 - "What dependencies does @std/http version 1.0.0 have?"
 - "List all packages in the registry"
 
 ### User and Scope Information
+
 - "Who are the members of the @std scope?"
 - "Show me the user with ID abc123..."
 - "What scopes is user xyz789... a member of?"
 
 ### Registry Statistics
+
 - "Show me the newest packages on JSR"
 - "What are the featured packages?"
 - "Get the latest registry statistics"
 
 ### Package and Scope Management (Requires Authentication)
+
 - "Create a new scope called @mycompany"
 - "Create a new package called utils in the @mycompany scope"
 - "Update the description of @mycompany/utils package"
@@ -365,4 +390,3 @@ deno task build
 ## License
 
 MIT
-

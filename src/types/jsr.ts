@@ -468,4 +468,3 @@ export type PublishingTask = z.infer<typeof PublishingTaskSchema>;
 export type Stats = z.infer<typeof StatsSchema>;
 export type Permission = z.infer<typeof PermissionSchema>;
 export type Authorization = z.infer<typeof AuthorizationSchema>;
-

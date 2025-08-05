@@ -211,8 +211,7 @@ export function createJSRTools(): Tool[] {
     },
     {
       name: "jsr_get_package_dependents",
-      description:
-        "Get packages that depend on a specific package.",
+      description: "Get packages that depend on a specific package.",
       inputSchema: {
         type: "object",
         properties: {
@@ -242,8 +241,7 @@ export function createJSRTools(): Tool[] {
     },
     {
       name: "jsr_get_package_score",
-      description:
-        "Get the package score details for a specific package.",
+      description: "Get the package score details for a specific package.",
       inputSchema: {
         type: "object",
         properties: {
@@ -261,8 +259,7 @@ export function createJSRTools(): Tool[] {
     },
     {
       name: "jsr_get_package_dependencies",
-      description:
-        "Get the dependencies of a specific package version.",
+      description: "Get the dependencies of a specific package version.",
       inputSchema: {
         type: "object",
         properties: {
@@ -421,7 +418,8 @@ export function createJSRTools(): Tool[] {
     },
     {
       name: "jsr_update_scope",
-      description: "Update scope settings (requires authentication and scope admin).",
+      description:
+        "Update scope settings (requires authentication and scope admin).",
       inputSchema: {
         type: "object",
         properties: {
@@ -443,7 +441,8 @@ export function createJSRTools(): Tool[] {
     },
     {
       name: "jsr_delete_scope",
-      description: "Delete a scope (requires authentication and scope admin, scope must have no packages).",
+      description:
+        "Delete a scope (requires authentication and scope admin, scope must have no packages).",
       inputSchema: {
         type: "object",
         properties: {
@@ -457,7 +456,8 @@ export function createJSRTools(): Tool[] {
     },
     {
       name: "jsr_add_scope_member",
-      description: "Invite a user to a scope (requires authentication and scope admin).",
+      description:
+        "Invite a user to a scope (requires authentication and scope admin).",
       inputSchema: {
         type: "object",
         properties: {
@@ -475,7 +475,8 @@ export function createJSRTools(): Tool[] {
     },
     {
       name: "jsr_update_scope_member",
-      description: "Update scope member roles (requires authentication and scope admin).",
+      description:
+        "Update scope member roles (requires authentication and scope admin).",
       inputSchema: {
         type: "object",
         properties: {
@@ -497,7 +498,8 @@ export function createJSRTools(): Tool[] {
     },
     {
       name: "jsr_remove_scope_member",
-      description: "Remove a member from a scope (requires authentication and scope admin).",
+      description:
+        "Remove a member from a scope (requires authentication and scope admin).",
       inputSchema: {
         type: "object",
         properties: {
@@ -515,7 +517,8 @@ export function createJSRTools(): Tool[] {
     },
     {
       name: "jsr_delete_scope_invite",
-      description: "Delete a scope invite (requires authentication and scope admin).",
+      description:
+        "Delete a scope invite (requires authentication and scope admin).",
       inputSchema: {
         type: "object",
         properties: {
@@ -533,7 +536,8 @@ export function createJSRTools(): Tool[] {
     },
     {
       name: "jsr_create_package",
-      description: "Create a new package in a scope (requires authentication and scope membership).",
+      description:
+        "Create a new package in a scope (requires authentication and scope membership).",
       inputSchema: {
         type: "object",
         properties: {
@@ -551,7 +555,8 @@ export function createJSRTools(): Tool[] {
     },
     {
       name: "jsr_update_package",
-      description: "Update package details (requires authentication and scope membership).",
+      description:
+        "Update package details (requires authentication and scope membership).",
       inputSchema: {
         type: "object",
         properties: {
@@ -618,7 +623,8 @@ export function createJSRTools(): Tool[] {
     },
     {
       name: "jsr_delete_package",
-      description: "Delete a package (requires authentication and scope admin, package must have no versions).",
+      description:
+        "Delete a package (requires authentication and scope admin, package must have no versions).",
       inputSchema: {
         type: "object",
         properties: {
@@ -636,7 +642,8 @@ export function createJSRTools(): Tool[] {
     },
     {
       name: "jsr_create_package_version",
-      description: "Create a new package version by uploading a tarball (requires authentication and scope membership).",
+      description:
+        "Create a new package version by uploading a tarball (requires authentication and scope membership).",
       inputSchema: {
         type: "object",
         properties: {
@@ -666,7 +673,8 @@ export function createJSRTools(): Tool[] {
     },
     {
       name: "jsr_update_package_version",
-      description: "Update package version yanked status (requires authentication and scope membership).",
+      description:
+        "Update package version yanked status (requires authentication and scope membership).",
       inputSchema: {
         type: "object",
         properties: {
@@ -1119,15 +1127,18 @@ export async function handleJSRTool(
       case "jsr_update_scope": {
         const { scope, ghActionsVerifyActor, requirePublishingFromCI } =
           UpdateScopeSchema.parse(args);
-        const updates: { ghActionsVerifyActor?: boolean | undefined; requirePublishingFromCI?: boolean | undefined } = {};
-        
+        const updates: {
+          ghActionsVerifyActor?: boolean | undefined;
+          requirePublishingFromCI?: boolean | undefined;
+        } = {};
+
         if (ghActionsVerifyActor !== undefined) {
           updates.ghActionsVerifyActor = ghActionsVerifyActor;
         }
         if (requirePublishingFromCI !== undefined) {
           updates.requirePublishingFromCI = requirePublishingFromCI;
         }
-        
+
         const result = await jsrClient.updateScope(config, scope, updates);
 
         return {
@@ -1152,7 +1163,11 @@ export async function handleJSRTool(
 
       case "jsr_add_scope_member": {
         const { scope, githubLogin } = AddScopeMemberSchema.parse(args);
-        const result = await jsrClient.addScopeMember(config, scope, githubLogin);
+        const result = await jsrClient.addScopeMember(
+          config,
+          scope,
+          githubLogin,
+        );
 
         return {
           content: [{
@@ -1205,7 +1220,11 @@ export async function handleJSRTool(
 
       case "jsr_create_package": {
         const { scope, package: packageName } = CreatePackageSchema.parse(args);
-        const result = await jsrClient.createPackage(config, scope, packageName);
+        const result = await jsrClient.createPackage(
+          config,
+          scope,
+          packageName,
+        );
 
         return {
           content: [{
@@ -1224,20 +1243,33 @@ export async function handleJSRTool(
           runtimeCompat,
           isArchived,
         } = UpdatePackageSchema.parse(args);
-        
+
         const updates: {
           description?: string | undefined;
           githubRepository?: { owner: string; repo: string } | null | undefined;
-          runtimeCompat?: { browser?: boolean | null | undefined; deno?: boolean | null | undefined; node?: boolean | null | undefined; workerd?: boolean | null | undefined; bun?: boolean | null | undefined } | undefined;
+          runtimeCompat?: {
+            browser?: boolean | null | undefined;
+            deno?: boolean | null | undefined;
+            node?: boolean | null | undefined;
+            workerd?: boolean | null | undefined;
+            bun?: boolean | null | undefined;
+          } | undefined;
           isArchived?: boolean | undefined;
         } = {};
-        
+
         if (description !== undefined) updates.description = description;
-        if (githubRepository !== undefined) updates.githubRepository = githubRepository;
+        if (githubRepository !== undefined) {
+          updates.githubRepository = githubRepository;
+        }
         if (runtimeCompat !== undefined) updates.runtimeCompat = runtimeCompat;
         if (isArchived !== undefined) updates.isArchived = isArchived;
-        
-        const result = await jsrClient.updatePackage(config, scope, name, updates);
+
+        const result = await jsrClient.updatePackage(
+          config,
+          scope,
+          name,
+          updates,
+        );
 
         return {
           content: [{
@@ -1262,7 +1294,7 @@ export async function handleJSRTool(
       case "jsr_create_package_version": {
         const { scope, name, version, configPath, tarballPath } =
           CreatePackageVersionSchema.parse(args);
-        
+
         // Read the tarball file
         const tarballData = await Deno.readFile(tarballPath);
         const result = await jsrClient.createPackageVersion(
@@ -1283,8 +1315,8 @@ export async function handleJSRTool(
       }
 
       case "jsr_update_package_version": {
-        const { scope, name, version, yanked } =
-          UpdatePackageVersionSchema.parse(args);
+        const { scope, name, version, yanked } = UpdatePackageVersionSchema
+          .parse(args);
         const result = await jsrClient.updatePackageVersion(
           config,
           scope,
@@ -1327,7 +1359,9 @@ export async function handleJSRTool(
 
       // Authorization operations
       case "jsr_create_authorization": {
-        const { challenge, permissions } = CreateAuthorizationSchema.parse(args);
+        const { challenge, permissions } = CreateAuthorizationSchema.parse(
+          args,
+        );
         const result = await jsrClient.createAuthorization(
           config,
           challenge,
@@ -1411,4 +1445,3 @@ export async function handleJSRTool(
     };
   }
 }
-

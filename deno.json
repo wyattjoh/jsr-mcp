@@ -1,6 +1,6 @@
 {
   "name": "@wyattjoh/jsr-mcp",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "license": "MIT",
   "exports": "./src/index.ts",
   "publish": {
@@ -11,7 +11,7 @@
       "deno.json",
       ".env.example"
     ],
-    "exclude": ["src/testdata/", "src/fixtures/", "tests/"]
+    "exclude": ["tests/"]
   },
   "tasks": {
     "dev": "deno run --allow-all --watch src/index.ts",
@@ -51,4 +51,3 @@
     }
   }
 }
-
