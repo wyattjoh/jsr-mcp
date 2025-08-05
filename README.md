@@ -80,7 +80,15 @@ Add to your MCP servers configuration using the JSR package:
   "mcpServers": {
     "jsr": {
       "command": "deno",
-      "args": ["run", "--allow-all", "jsr:@wyattjoh/jsr-mcp"]
+      "args": [
+        "run",
+        "--allow-read",
+        "--allow-write",
+        "--allow-env",
+        "--allow-run",
+        "--allow-net",
+        "jsr:@wyattjoh/jsr-mcp"
+      ]
     }
   }
 }
@@ -346,7 +354,7 @@ Once configured, you can interact with JSR through your AI assistant:
 
 ### Requirements
 
-- [Deno](https://deno.land/) 1.37+
+- [Deno](https://deno.land/) 2.4.3+
 
 ### Local Development
 

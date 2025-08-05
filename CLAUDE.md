@@ -35,3 +35,9 @@ The server uses environment variables for configuration (JSR_API_TOKEN, JSR_API_
 - Tool handlers use Zod schemas for input validation before processing
 - API responses are wrapped in a consistent format with proper error handling
 - The server tests JSR connectivity on startup but continues running even if the connection fails
+
+## Repository Management
+
+- Always use `deno task fmt`, `deno task lint`, and `deno task check` after modifying or creating code to ensure that it's correct.
+- Run `deno test --allow-net` to verify all tests pass before committing changes.
+- When making changes to the available tools, ensure you always update the README.md with the relevant changes.
