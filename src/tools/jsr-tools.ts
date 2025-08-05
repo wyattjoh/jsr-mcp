@@ -580,7 +580,7 @@ export function createJSRTools(): Tool[] {
                 type: "string",
                 description: "GitHub repository owner",
               },
-              repo: {
+              name: {
                 type: "string",
                 description: "GitHub repository name",
               },
@@ -1246,7 +1246,7 @@ export async function handleJSRTool(
 
         const updates: {
           description?: string | undefined;
-          githubRepository?: { owner: string; repo: string } | null | undefined;
+          githubRepository?: { owner: string; name: string } | null | undefined;
           runtimeCompat?: {
             browser?: boolean | null | undefined;
             deno?: boolean | null | undefined;

@@ -67,6 +67,11 @@ async function makeApiRequest<T>(
       );
     }
 
+    // Handle 204 No Content responses that have no body
+    if (response.status === 204) {
+      return undefined as T;
+    }
+
     return await response.json();
   } catch (error) {
     throw new Error(
@@ -101,6 +106,11 @@ async function makeRegistryRequest<T>(
       throw new Error(
         `JSR Registry request failed: ${response.status} ${response.statusText}`,
       );
+    }
+
+    // Handle 204 No Content responses that have no body
+    if (response.status === 204) {
+      return undefined as T;
     }
 
     return await response.json();
@@ -538,7 +548,7 @@ export async function updatePackage(
   name: string,
   updates: {
     description?: string | undefined;
-    githubRepository?: { owner: string; repo: string } | null | undefined;
+    githubRepository?: { owner: string; name: string } | null | undefined;
     runtimeCompat?: RuntimeCompat | undefined;
     isArchived?: boolean | undefined;
   },

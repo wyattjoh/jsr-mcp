@@ -385,7 +385,7 @@ export const UpdatePackageSchema = GetPackageSchema.extend({
   description: z.string().max(250).optional(),
   githubRepository: z.object({
     owner: z.string(),
-    repo: z.string(),
+    name: z.string(),
   }).nullable().optional(),
   runtimeCompat: RuntimeCompatSchema.optional(),
   isArchived: z.boolean().optional(),
