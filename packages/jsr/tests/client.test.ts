@@ -23,7 +23,7 @@ import {
   listScopePackages,
   searchPackages,
   testConnection,
-} from "../src/clients/jsr.ts";
+} from "../mod.ts";
 
 const TEST_CONFIG = createJSRConfig(
   "https://api.jsr.io",

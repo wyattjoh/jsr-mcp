@@ -20,9 +20,7 @@ export interface PaginatedResponse<T> {
 
 // Common pagination schema
 export const PaginationSchema = z.object({
-  limit: z.number().optional().describe(
-    "Maximum number of results to return",
-  ),
+  limit: z.number().optional().describe("Maximum number of results to return"),
   skip: z.number().optional().describe(
     "Number of results to skip (for pagination)",
   ),

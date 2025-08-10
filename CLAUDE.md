@@ -4,40 +4,96 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a Model Context Protocol (MCP) server that provides tools for interacting with the JSR (JavaScript Registry) API. It's built with Deno and TypeScript, using the MCP SDK to expose JSR functionality to AI assistants.
+This is a Deno workspace containing two packages:
+
+1. **@wyattjoh/jsr** - A TypeScript client library for the JSR (JavaScript Registry) API
+2. **@wyattjoh/jsr-mcp** - A Model Context Protocol (MCP) server that exposes JSR functionality to AI assistants
+
+The workspace structure follows Deno best practices with separate packages that can be independently published to JSR.
+
+## Workspace Structure
+
+```
+/
+├── deno.json                 # Workspace configuration
+├── packages/
+│   ├── jsr/                  # JSR client library package
+│   │   ├── deno.json        # Package configuration
+│   │   ├── mod.ts           # Main exports
+│   │   ├── src/
+│   │   │   ├── client.ts    # JSR API client implementation
+│   │   │   └── types/
+│   │   │       └── jsr.ts   # TypeScript types and Zod schemas
+│   │   └── tests/
+│   │       └── client.test.ts
+│   └── jsr-mcp/             # MCP server package
+│       ├── deno.json        # Package configuration
+│       ├── mod.ts           # Main entry point
+│       ├── src/
+│       │   ├── index.ts     # MCP server implementation
+│       │   └── types/
+│       │       └── mcp.ts   # MCP-specific types
+│       └── tests/
+│           └── server.test.ts
+```
 
 ## Development Commands
 
-- **Run development server**: `deno task dev` (watches for changes)
-- **Run production server**: `deno task start`
-- **Type checking**: `deno task check`
-- **Formatting**: `deno task fmt`
-- **Linting**: `deno task lint`
-- **Build binary**: `deno task build`
-- **Run tests**: `deno task test`
+**Workspace-level commands** (run from root):
+
+- **Format all code**: `deno fmt`
+- **Lint all code**: `deno lint`
+- **Type check all code**: `deno check packages/jsr/mod.ts packages/jsr-mcp/mod.ts`
+- **Run all tests**: `deno test --allow-net packages/`
+- **Run development server**: `deno run --allow-read --allow-write --allow-env --allow-run --allow-net --watch packages/jsr-mcp/mod.ts`
+- **Run production server**: `deno run --allow-read --allow-write --allow-env --allow-run --allow-net packages/jsr-mcp/mod.ts`
+- **Build MCP server binary**: `cd packages/jsr-mcp && deno compile --allow-read --allow-write --allow-env --allow-run --allow-net --output=jsr-mcp mod.ts`
 
 ## Architecture
 
-The codebase follows a modular architecture:
+### JSR Client Package (`packages/jsr/`)
 
-- **Entry point**: `src/index.ts` - Sets up the MCP server, handles stdio transport, and routes tool requests
-- **JSR client**: `src/clients/jsr.ts` - Handles all HTTP communication with JSR API and Registry endpoints
-- **Tool definitions**: `src/tools/jsr-tools.ts` - Defines available MCP tools and handles tool execution
-- **Type definitions**:
-  - `src/types/jsr.ts` - JSR API response types and validation schemas
-  - `src/types/mcp.ts` - MCP-specific types
+- **Purpose**: Reusable TypeScript client for the JSR API
+- **Main exports**: `mod.ts` exports all client functions and types
+- **Dependencies**: Only `zod` for schema validation
+- **Can be used independently** of the MCP server
 
-The server uses environment variables for configuration (JSR_API_TOKEN, JSR_API_URL, JSR_REGISTRY_URL) and implements error handling at multiple levels.
+### MCP Server Package (`packages/jsr-mcp/`)
+
+- **Purpose**: MCP server that exposes JSR functionality to AI assistants
+- **Dependencies**:
+  - Local: `@wyattjoh/jsr` (the client package)
+  - External: `@modelcontextprotocol/sdk`, `@std/dotenv`, `zod`
+- **Pattern**: Uses inline `server.tool()` calls (similar to iMessage MCP)
+- **Configuration**: Via environment variables (JSR_API_URL, JSR_REGISTRY_URL, JSR_API_TOKEN)
 
 ## Key Design Patterns
 
-- All JSR API interactions go through the `JSRConfig` interface created by `createJSRConfig()`
-- Tool handlers use Zod schemas for input validation before processing
-- API responses are wrapped in a consistent format with proper error handling
-- The server tests JSR connectivity on startup but continues running even if the connection fails
+- **Workspace imports**: The MCP server imports the JSR client using a relative path in `deno.json`
+- **Type safety**: All API interactions use Zod schemas for validation
+- **Error handling**: Consistent error wrapping and reporting
+- **Testing**: Each package has its own test suite
+- **MCP tools**: Defined inline using `server.tool()` with Zod schemas
 
 ## Repository Management
 
-- Always use `deno task fmt`, `deno task lint`, and `deno task check` after modifying or creating code to ensure that it's correct.
-- Run `deno test --allow-net` to verify all tests pass before committing changes.
-- When making changes to the available tools, ensure you always update the README.md with the relevant changes.
+- Always run `deno fmt`, `deno lint`, and `deno check packages/jsr/mod.ts packages/jsr-mcp/mod.ts` after modifying code
+- Run `deno test --allow-net packages/` to verify all tests pass
+- When updating tool definitions in the MCP server, ensure schemas match the JSR client types
+- The JSR client package can be published independently to JSR for reuse in other projects
+
+## Publishing
+
+Each package can be published separately to JSR:
+
+- `packages/jsr/` as `@wyattjoh/jsr`
+- `packages/jsr-mcp/` as `@wyattjoh/jsr-mcp`
+
+Both packages include their own LICENSE file and are configured for JSR publishing.
+
+# important-instruction-reminders
+
+Do what has been asked; nothing more, nothing less.
+NEVER create files unless they're absolutely necessary for achieving your goal.
+ALWAYS prefer editing an existing file to creating a new one.
+NEVER proactively create documentation files (*.md) or README files. Only create documentation files if explicitly requested by the User.
