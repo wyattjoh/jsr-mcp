@@ -22,17 +22,14 @@ The workspace structure follows Deno best practices with separate packages that 
 │   │   ├── mod.ts           # Main exports
 │   │   ├── src/
 │   │   │   ├── client.ts    # JSR API client implementation
-│   │   │   └── types/
-│   │   │       └── jsr.ts   # TypeScript types and Zod schemas
+│   │   │   └── types.ts     # TypeScript types and Zod schemas
 │   │   └── tests/
 │   │       └── client.test.ts
 │   └── jsr-mcp/             # MCP server package
 │       ├── deno.json        # Package configuration
 │       ├── mod.ts           # Main entry point
 │       ├── src/
-│       │   ├── index.ts     # MCP server implementation
-│       │   └── types/
-│       │       └── mcp.ts   # MCP-specific types
+│       │   └── index.ts     # MCP server implementation with inline tool definitions
 │       └── tests/
 │           └── server.test.ts
 ```
@@ -45,9 +42,16 @@ The workspace structure follows Deno best practices with separate packages that 
 - **Lint all code**: `deno lint`
 - **Type check all code**: `deno check packages/jsr/mod.ts packages/jsr-mcp/mod.ts`
 - **Run all tests**: `deno test --allow-net packages/`
+- **Run a single test file**: `deno test --allow-net packages/jsr/tests/client.test.ts`
 - **Run development server**: `deno run --allow-read --allow-write --allow-env --allow-run --allow-net --watch packages/jsr-mcp/mod.ts`
 - **Run production server**: `deno run --allow-read --allow-write --allow-env --allow-run --allow-net packages/jsr-mcp/mod.ts`
 - **Build MCP server binary**: `cd packages/jsr-mcp && deno compile --allow-read --allow-write --allow-env --allow-run --allow-net --output=jsr-mcp mod.ts`
+
+**Git hooks** (managed via deno-task-hooks):
+
+- **Install hooks**: `deno task hooks:install`
+- **Pre-commit**: Runs `deno check`, `deno fmt --check`, and `deno lint`
+- **Pre-push**: Runs `deno publish --dry-run --allow-dirty`
 
 ## Architecture
 
@@ -57,23 +61,24 @@ The workspace structure follows Deno best practices with separate packages that 
 - **Main exports**: `mod.ts` exports all client functions and types
 - **Dependencies**: Only `zod` for schema validation
 - **Can be used independently** of the MCP server
+- **Testing**: Uses `jsr:@std/assert` for assertions
 
 ### MCP Server Package (`packages/jsr-mcp/`)
 
 - **Purpose**: MCP server that exposes JSR functionality to AI assistants
 - **Dependencies**:
-  - Local: `@wyattjoh/jsr` (the client package)
+  - Local: `@wyattjoh/jsr` (the client package, imported via relative path)
   - External: `@modelcontextprotocol/sdk`, `@std/dotenv`, `zod`
-- **Pattern**: Uses inline `server.tool()` calls (similar to iMessage MCP)
+- **Pattern**: Uses inline `server.tool()` calls for MCP tool definitions
 - **Configuration**: Via environment variables (JSR_API_URL, JSR_REGISTRY_URL, JSR_API_TOKEN)
 
 ## Key Design Patterns
 
-- **Workspace imports**: The MCP server imports the JSR client using a relative path in `deno.json`
+- **Workspace imports**: The MCP server imports the JSR client using a relative path configured in workspace root
 - **Type safety**: All API interactions use Zod schemas for validation
 - **Error handling**: Consistent error wrapping and reporting
-- **Testing**: Each package has its own test suite
-- **MCP tools**: Defined inline using `server.tool()` with Zod schemas
+- **Testing**: Each package has its own test suite using Deno's built-in test runner
+- **MCP tools**: Defined inline using `server.tool()` with Zod schemas that mirror the JSR client types
 
 ## Repository Management
 
@@ -89,11 +94,4 @@ Each package can be published separately to JSR:
 - `packages/jsr/` as `@wyattjoh/jsr`
 - `packages/jsr-mcp/` as `@wyattjoh/jsr-mcp`
 
-Both packages include their own LICENSE file and are configured for JSR publishing.
-
-# important-instruction-reminders
-
-Do what has been asked; nothing more, nothing less.
-NEVER create files unless they're absolutely necessary for achieving your goal.
-ALWAYS prefer editing an existing file to creating a new one.
-NEVER proactively create documentation files (*.md) or README files. Only create documentation files if explicitly requested by the User.
+Both packages include their own LICENSE file and are configured for JSR publishing via `deno publish`.
