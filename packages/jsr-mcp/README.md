@@ -10,7 +10,7 @@ deno add @wyattjoh/jsr-mcp
 
 ## Features
 
-- **40+ MCP Tools** for comprehensive JSR access:
+- **40 MCP Tools** for comprehensive JSR access:
   - Package search and discovery
   - Version management and dependencies
   - Scope and member management
@@ -119,6 +119,7 @@ The server can be configured via environment variables:
 - `jsr_update_scope_member` - Update member role
 - `jsr_remove_scope_member` - Remove member
 - `jsr_list_scope_invites` - List pending invites
+- `jsr_delete_scope_invite` - Delete scope invite
 - `jsr_accept_scope_invite` - Accept invite
 - `jsr_decline_scope_invite` - Decline invite
 
@@ -126,6 +127,8 @@ The server can be configured via environment variables:
 
 - `jsr_get_current_user` - Get authenticated user
 - `jsr_get_current_user_scopes` - Get user's scopes
+- `jsr_get_current_user_scope_member` - Get user's membership in a scope
+- `jsr_get_current_user_invites` - Get user's pending invites
 - `jsr_get_user` - Get user details
 - `jsr_get_user_scopes` - Get user's scopes
 

@@ -86,7 +86,7 @@ For Claude Desktop app integration, add this to your `claude_desktop_config.json
 
 ### Available Tools
 
-The MCP server provides 40+ tools for comprehensive JSR access:
+The MCP server provides 40 tools for comprehensive JSR access:
 
 #### Package Operations
 
@@ -98,6 +98,14 @@ The MCP server provides 40+ tools for comprehensive JSR access:
 - **jsr_get_package_dependencies** - Get dependencies
 - **jsr_get_package_score** - Get package quality score
 - **jsr_get_package_dependents** - Find dependent packages
+- **jsr_create_package** - Create new package (requires auth)
+- **jsr_update_package** - Update package (requires auth)
+- **jsr_delete_package** - Delete package (requires auth)
+
+#### Package Version Management
+
+- **jsr_create_package_version** - Upload new version (requires auth)
+- **jsr_update_package_version** - Update version, e.g., yank (requires auth)
 
 #### Scope Management
 
@@ -113,13 +121,36 @@ The MCP server provides 40+ tools for comprehensive JSR access:
 - **jsr_add_scope_member** - Invite member (requires auth)
 - **jsr_update_scope_member** - Update member role (requires auth)
 - **jsr_remove_scope_member** - Remove member (requires auth)
+- **jsr_list_scope_invites** - List pending invites
+- **jsr_delete_scope_invite** - Delete scope invite (requires auth)
+- **jsr_accept_scope_invite** - Accept invite (requires auth)
+- **jsr_decline_scope_invite** - Decline invite (requires auth)
 
 #### User Operations
 
 - **jsr_get_current_user** - Get authenticated user
+- **jsr_get_current_user_scopes** - Get user's scopes
+- **jsr_get_current_user_scope_member** - Get user's membership in a scope
+- **jsr_get_current_user_invites** - Get user's pending invites
 - **jsr_get_user** - Get user details
+- **jsr_get_user_scopes** - Get user's scopes
+
+#### Registry Operations
+
 - **jsr_list_packages** - List all registry packages
 - **jsr_get_stats** - Get registry statistics
+
+#### Authorization (OAuth)
+
+- **jsr_create_authorization** - Start authorization flow (requires auth)
+- **jsr_get_authorization_details** - Get authorization details
+- **jsr_approve_authorization** - Approve authorization (requires auth)
+- **jsr_deny_authorization** - Deny authorization (requires auth)
+- **jsr_exchange_authorization** - Exchange code for token (requires auth)
+
+#### Publishing
+
+- **jsr_get_publishing_task** - Get publishing task status
 
 ### Example Usage
 

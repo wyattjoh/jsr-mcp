@@ -12,26 +12,29 @@ deno add @wyattjoh/jsr
 
 ```typescript
 import {
+  createJSRConfig,
   getPackage,
   getPackageVersion,
   listPackageVersions,
   searchPackages,
 } from "@wyattjoh/jsr";
 
-// Search for packages
-const results = await searchPackages({
-  query: "react",
-  limit: 10,
+// Create a configuration
+const config = createJSRConfig({
+  apiToken: "your-api-token", // optional, for authenticated operations
 });
 
+// Search for packages
+const results = await searchPackages(config, "react", 10);
+
 // Get package details
-const pkg = await getPackage("deno", "std");
+const pkg = await getPackage(config, "deno", "std");
 
 // Get specific version
-const version = await getPackageVersion("deno", "std", "1.0.0");
+const version = await getPackageVersion(config, "deno", "std", "1.0.0");
 
 // List all versions
-const versions = await listPackageVersions("deno", "std");
+const versions = await listPackageVersions(config, "deno", "std");
 ```
 
 ## Features
@@ -46,55 +49,91 @@ const versions = await listPackageVersions("deno", "std");
 
 ## API Reference
 
+### Configuration
+
+```typescript
+createJSRConfig(options?: ConfigOptions): JSRConfig
+testConnection(config: JSRConfig): Promise<boolean>
+```
+
 ### Packages
 
 ```typescript
-searchPackages(options?: SearchOptions): Promise<SearchResults>
-getPackage(scope: string, name: string): Promise<Package>
-getPackageVersion(scope: string, name: string, version: string): Promise<PackageVersion>
-listPackageVersions(scope: string, name: string, options?: ListOptions): Promise<PackageVersion[]>
-getPackageMetadata(scope: string, name: string): Promise<PackageMetadata>
-getPackageDependencies(scope: string, name: string, version: string): Promise<Dependencies>
-getPackageScore(scope: string, name: string): Promise<PackageScore>
-getPackageDependents(scope: string, name: string, options?: DependentsOptions): Promise<Dependents>
+searchPackages(config: JSRConfig, query?: string, limit?: number, page?: number): Promise<SearchResults>
+getPackage(config: JSRConfig, scope: string, name: string): Promise<Package>
+getPackageVersion(config: JSRConfig, scope: string, name: string, version: string): Promise<PackageVersion>
+listPackageVersions(config: JSRConfig, scope: string, name: string, limit?: number, page?: number): Promise<PackageVersion[]>
+getPackageMetadata(config: JSRConfig, scope: string, name: string): Promise<PackageMetadata>
+getPackageDependencies(config: JSRConfig, scope: string, name: string, version: string): Promise<Dependencies>
+getPackageScore(config: JSRConfig, scope: string, name: string): Promise<PackageScore>
+getPackageDependents(config: JSRConfig, scope: string, name: string, options?: DependentsOptions): Promise<Dependents>
+createPackage(config: JSRConfig, scope: string, name: string, description?: string): Promise<Package>
+updatePackage(config: JSRConfig, scope: string, name: string, updates: PackageUpdates): Promise<Package>
+deletePackage(config: JSRConfig, scope: string, name: string): Promise<void>
+```
+
+### Package Versions
+
+```typescript
+createPackageVersion(config: JSRConfig, scope: string, name: string, version: string, config?: object, files?: File[]): Promise<PackageVersion>
+updatePackageVersion(config: JSRConfig, scope: string, name: string, version: string, yanked: boolean): Promise<PackageVersion>
 ```
 
 ### Scopes
 
 ```typescript
-getScope(scope: string): Promise<Scope>
-listScopePackages(scope: string, options?: ListOptions): Promise<Package[]>
-createScope(scope: string, description?: string): Promise<Scope>
-updateScope(scope: string, settings: ScopeSettings): Promise<Scope>
-deleteScope(scope: string): Promise<void>
+getScope(config: JSRConfig, scope: string): Promise<Scope>
+listScopePackages(config: JSRConfig, scope: string, limit?: number, page?: number): Promise<Package[]>
+createScope(config: JSRConfig, scope: string, description?: string): Promise<Scope>
+updateScope(config: JSRConfig, scope: string, settings: ScopeSettings): Promise<Scope>
+deleteScope(config: JSRConfig, scope: string): Promise<void>
 ```
 
 ### Members & Invites
 
 ```typescript
-listScopeMembers(scope: string): Promise<ScopeMember[]>
-addScopeMember(scope: string, githubLogin: string): Promise<void>
-updateScopeMember(scope: string, userId: string, isAdmin: boolean): Promise<void>
-removeScopeMember(scope: string, userId: string): Promise<void>
-listScopeInvites(scope: string): Promise<ScopeInvite[]>
-acceptScopeInvite(scope: string): Promise<void>
-declineScopeInvite(scope: string): Promise<void>
+listScopeMembers(config: JSRConfig, scope: string): Promise<ScopeMember[]>
+addScopeMember(config: JSRConfig, scope: string, githubLogin: string): Promise<void>
+updateScopeMember(config: JSRConfig, scope: string, userId: string, isAdmin: boolean): Promise<void>
+removeScopeMember(config: JSRConfig, scope: string, userId: string): Promise<void>
+listScopeInvites(config: JSRConfig, scope: string): Promise<ScopeInvite[]>
+deleteScopeInvite(config: JSRConfig, scope: string, userId: string): Promise<void>
+acceptScopeInvite(config: JSRConfig, scope: string): Promise<void>
+declineScopeInvite(config: JSRConfig, scope: string): Promise<void>
 ```
 
 ### Users
 
 ```typescript
-getCurrentUser(): Promise<User>
-getCurrentUserScopes(): Promise<Scope[]>
-getUser(id: string): Promise<User>
-getUserScopes(id: string): Promise<Scope[]>
+getCurrentUser(config: JSRConfig): Promise<User>
+getCurrentUserScopes(config: JSRConfig): Promise<Scope[]>
+getCurrentUserScopeMember(config: JSRConfig, scope: string): Promise<ScopeMember>
+getCurrentUserInvites(config: JSRConfig): Promise<ScopeInvite[]>
+getUser(config: JSRConfig, id: string): Promise<User>
+getUserScopes(config: JSRConfig, id: string): Promise<Scope[]>
 ```
 
 ### Registry
 
 ```typescript
-listPackages(options?: ListOptions): Promise<Package[]>
-getStats(): Promise<RegistryStats>
+listPackages(config: JSRConfig, options?: ListOptions): Promise<Package[]>
+getStats(config: JSRConfig): Promise<RegistryStats>
+```
+
+### Publishing
+
+```typescript
+getPublishingTask(config: JSRConfig, taskId: string): Promise<PublishingTask>
+```
+
+### Authorization
+
+```typescript
+createAuthorization(config: JSRConfig, params: AuthorizationParams): Promise<Authorization>
+getAuthorizationDetails(config: JSRConfig, code: string): Promise<AuthorizationDetails>
+approveAuthorization(config: JSRConfig, code: string): Promise<void>
+denyAuthorization(config: JSRConfig, code: string): Promise<void>
+exchangeAuthorizationCode(config: JSRConfig, code: string, exchangeToken: string): Promise<TokenResponse>
 ```
 
 ## Authentication
@@ -102,13 +141,15 @@ getStats(): Promise<RegistryStats>
 Some operations require authentication via JSR API token:
 
 ```typescript
-import { setApiToken } from "@wyattjoh/jsr";
+import { createJSRConfig, createPackage } from "@wyattjoh/jsr";
 
-// Set your JSR API token
-setApiToken("your-api-token");
+// Create a config with your JSR API token
+const config = createJSRConfig({
+  apiToken: "your-api-token",
+});
 
 // Now you can perform authenticated operations
-await createPackage("my-scope", "my-package");
+await createPackage(config, "my-scope", "my-package", "Package description");
 ```
 
 ## Configuration
@@ -116,11 +157,12 @@ await createPackage("my-scope", "my-package");
 The client can be configured with custom URLs:
 
 ```typescript
-import { configure } from "@wyattjoh/jsr";
+import { createJSRConfig } from "@wyattjoh/jsr";
 
-configure({
+const config = createJSRConfig({
   apiUrl: "https://api.jsr.io",
   registryUrl: "https://jsr.io",
+  apiToken: "your-api-token", // optional
 });
 ```
 
