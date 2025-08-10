@@ -1,14 +1,11 @@
 {
   "$schema": "https://deno.land/x/deno/cli/schemas/config-file.v1.json",
   "name": "@wyattjoh/jsr",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "license": "MIT",
   "exports": "./mod.ts",
   "publish": {
     "include": ["LICENSE", "README.md", "mod.ts", "src/**/*.ts", "deno.json"]
-  },
-  "imports": {
-    "zod": "npm:zod@^3.22.0"
   },
   "repository": {
     "type": "git",

@@ -14,7 +14,7 @@ import type {
   ScopeMember,
   Stats,
   User,
-} from "./types/jsr.ts";
+} from "./types.ts";
 import deno from "../deno.json" with { type: "json" };
 
 /**

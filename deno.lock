@@ -4,9 +4,9 @@
     "jsr:@std/assert@*": "1.0.13",
     "jsr:@std/dotenv@~0.225.5": "0.225.5",
     "jsr:@std/internal@^1.0.6": "1.0.10",
-    "npm:@modelcontextprotocol/sdk@1": "1.17.1_express@5.1.0_zod@3.25.76",
+    "npm:@modelcontextprotocol/sdk@^1.17.2": "1.17.2_express@5.1.0_zod@3.25.76",
     "npm:@types/node@*": "22.10.2",
-    "npm:zod@^3.22.0": "3.25.76"
+    "npm:zod@^4.0.17": "4.0.17"
   },
   "jsr": {
     "@std/assert@1.0.13": {
@@ -23,8 +23,8 @@
     }
   },
   "npm": {
-    "@modelcontextprotocol/sdk@1.17.1_express@5.1.0_zod@3.25.76": {
-      "integrity": "sha512-CPle1OQehbWqd25La9Ack5B07StKIxh4+Bf19qnpZKJC1oI22Y0czZHbifjw1UoczIfKBwBDAp/dFxvHG13B5A==",
+    "@modelcontextprotocol/sdk@1.17.2_express@5.1.0_zod@3.25.76": {
+      "integrity": "sha512-EFLRNXR/ixpXQWu6/3Cu30ndDFIFNaqUXcTqsGebujeMan9FzhAaFFswLRiFj61rgygDRr8WO1N+UijjgRxX9g==",
       "dependencies": [
         "ajv",
         "content-type",
@@ -36,7 +36,7 @@
         "express-rate-limit",
         "pkce-challenge",
         "raw-body",
-        "zod",
+        "zod@3.25.76",
         "zod-to-json-schema"
       ]
     },
@@ -123,8 +123,8 @@
         "which"
       ]
     },
-    "debug@4.4.0": {
-      "integrity": "sha512-6WTZ/IxCY/T6BALoZHaE4ctp9xm+Z5kY/pzYaCHRFeyVhojxlrm+46y68HA6hr0TcwEssoxNiDEUJQjfPZ/RYA==",
+    "debug@4.4.1": {
+      "integrity": "sha512-KcKCqiftBJcZr++7ykoDIEwSa3XWowTfNPo92BYxjXiyYEVrUQh2aLyhxBCwww+heortUFxEJYcRzosstTEBYQ==",
       "dependencies": [
         "ms"
       ]
@@ -515,28 +515,26 @@
     "wrappy@1.0.2": {
       "integrity": "sha512-l4Sp/DRseor9wL6EvV2+TuQn63dMkPjZ/sp9XkghTEbV9KlPS1xUsZ3u7/IQO4wxtcFB4bgpQPRcR3QCvezPcQ=="
     },
-    "zod-to-json-schema@3.24.1_zod@3.25.76": {
-      "integrity": "sha512-3h08nf3Vw3Wl3PK+q3ow/lIil81IT2Oa7YpQyUUDsEWbXveMesdfK1xBd2RhCkynwZndAxixji/7SYJJowr62w==",
+    "zod-to-json-schema@3.24.6_zod@3.25.76": {
+      "integrity": "sha512-h/z3PKvcTcTetyjl1fkj79MHNEjm+HpD6NXheWjzOekY7kV+lwDYnHw+ivHkijnCSMz1yJaWBD9vu/Fcmk+vEg==",
       "dependencies": [
-        "zod"
+        "zod@3.25.76"
       ]
     },
     "zod@3.25.76": {
       "integrity": "sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ=="
+    },
+    "zod@4.0.17": {
+      "integrity": "sha512-1PHjlYRevNxxdy2JZ8JcNAw7rX8V9P1AKkP+x/xZfxB0K5FYfuV+Ug6P/6NVSR2jHQ+FzDDoDHS04nYUsOIyLQ=="
     }
   },
   "workspace": {
     "members": {
-      "packages/jsr": {
-        "dependencies": [
-          "npm:zod@^3.22.0"
-        ]
-      },
       "packages/jsr-mcp": {
         "dependencies": [
           "jsr:@std/dotenv@~0.225.5",
-          "npm:@modelcontextprotocol/sdk@1",
-          "npm:zod@^3.22.0"
+          "npm:@modelcontextprotocol/sdk@^1.17.2",
+          "npm:zod@^4.0.17"
         ]
       }
     }

@@ -1,6 +1,4 @@
-#!/usr/bin/env -S deno run --allow-read --allow-write --allow-env --allow-run --allow-net
-
-import "@std/dotenv/load";
+import { load } from "@std/dotenv";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
@@ -1312,7 +1310,17 @@ const createServer = (config: JSRConfig) => {
   return server;
 };
 
-const main = async () => {
+/**
+ * Main function to start the JSR MCP server.
+ *
+ * This function initializes the JSR client configuration, tests the connection,
+ * and starts the MCP server using the StdioServerTransport.
+ *
+ * @returns {Promise<void>}
+ */
+export const main = async () => {
+  await load();
+
   const apiUrl = Deno.env.get("JSR_API_URL") || "https://api.jsr.io";
   const registryUrl = Deno.env.get("JSR_REGISTRY_URL") || "https://jsr.io";
   const apiToken = Deno.env.get("JSR_API_TOKEN");
@@ -1344,8 +1352,3 @@ const main = async () => {
   await server.connect(transport);
   console.error("JSR MCP Server running on stdio");
 };
-
-main().catch((error) => {
-  console.error("Fatal error in main():", error);
-  Deno.exit(1);
-});

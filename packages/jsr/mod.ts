@@ -12,4 +12,4 @@
 export * from "./src/client.ts";
 
 // Re-export types
-export type * from "./src/types/jsr.ts";
+export type * from "./src/types.ts";
