@@ -9,12 +9,12 @@
  * @module
  */
 
-import { main } from "./src/index.ts";
+import { startLocalServer } from "./src/index.ts";
 
 // Re-export the main MCP server entry point
 export * from "./src/index.ts";
 
 // For direct execution
 if (import.meta.main) {
-  await main();
+  await startLocalServer();
 }

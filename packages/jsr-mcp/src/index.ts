@@ -1318,7 +1318,7 @@ const createServer = (config: JSRConfig) => {
  *
  * @returns {Promise<void>}
  */
-export const main = async () => {
+export const startLocalServer = async (): Promise<void> => {
   await load();
 
   const apiUrl = Deno.env.get("JSR_API_URL") || "https://api.jsr.io";
