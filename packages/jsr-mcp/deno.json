@@ -8,7 +8,7 @@
     "include": ["LICENSE", "README.md", "mod.ts", "src/**/*.ts", "deno.json"]
   },
   "tasks": {
-    "build": "deno compile --allow-read --allow-write --allow-env --allow-run --allow-net --output=jsr-mcp mod.ts"
+    "build": "deno compile --allow-env --allow-net --output=jsr-mcp mod.ts"
   },
   "imports": {
     "@modelcontextprotocol/sdk": "npm:@modelcontextprotocol/sdk@^1.17.2",
