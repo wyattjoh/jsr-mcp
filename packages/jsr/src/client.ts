@@ -84,8 +84,9 @@ async function makeApiRequest<T>(
     headers["Authorization"] = `Bearer ${config.apiToken}`;
   }
 
+  let response: Response | undefined;
   try {
-    const response = await fetch(url, {
+    response = await fetch(url, {
       ...options,
       headers,
     });
@@ -99,11 +100,13 @@ async function makeApiRequest<T>(
 
     // Handle 204 No Content responses that have no body
     if (response.status === 204) {
+      await response.body?.cancel();
       return undefined as T;
     }
 
     return await response.json();
   } catch (error) {
+    await response?.body?.cancel();
     throw new Error(
       `JSR API request failed: ${
         error instanceof Error ? error.message : String(error)
