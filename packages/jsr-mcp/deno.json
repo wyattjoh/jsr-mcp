@@ -1,18 +1,17 @@
 {
   "$schema": "https://deno.land/x/deno/cli/schemas/config-file.v1.json",
   "name": "@wyattjoh/jsr-mcp",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "license": "MIT",
   "exports": "./mod.ts",
   "publish": {
     "include": ["LICENSE", "README.md", "mod.ts", "src/**/*.ts", "deno.json"]
   },
   "tasks": {
-    "build": "deno compile --allow-env --allow-net --output=jsr-mcp mod.ts"
+    "build": "deno compile --allow-env=JSR_API_URL,JSR_REGISTRY_URL,JSR_API_TOKEN --allow-net=api.jsr.io,jsr.io --output=jsr-mcp mod.ts"
   },
   "imports": {
     "@modelcontextprotocol/sdk": "npm:@modelcontextprotocol/sdk@^1.17.2",
-    "@std/dotenv": "jsr:@std/dotenv@^0.225.5",
     "zod": "npm:zod@^4.0.17"
   },
   "repository": {

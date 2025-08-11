@@ -30,7 +30,7 @@ deno add @wyattjoh/jsr-mcp
 The package can be run directly as an MCP server:
 
 ```bash
-deno run --allow-net --allow-env jsr:@wyattjoh/jsr-mcp
+deno run --allow-net=api.jsr.io,jsr.io --allow-env=JSR_API_URL,JSR_REGISTRY_URL,JSR_API_TOKEN jsr:@wyattjoh/jsr-mcp
 ```
 
 ### In Claude Desktop
@@ -44,8 +44,8 @@ Add to your Claude Desktop configuration (`~/Library/Application Support/Claude/
       "command": "deno",
       "args": [
         "run",
-        "--allow-net",
-        "--allow-env",
+        "--allow-net=api.jsr.io,jsr.io",
+        "--allow-env=JSR_API_URL,JSR_REGISTRY_URL,JSR_API_TOKEN",
         "jsr:@wyattjoh/jsr-mcp"
       ],
       "env": {
@@ -62,7 +62,7 @@ Build and run as a standalone binary:
 
 ```bash
 # Build the binary
-deno compile --allow-net --allow-env --output=jsr-mcp jsr:@wyattjoh/jsr-mcp
+deno compile --allow-net=api.jsr.io,jsr.io --allow-env=JSR_API_URL,JSR_REGISTRY_URL,JSR_API_TOKEN --output=jsr-mcp jsr:@wyattjoh/jsr-mcp
 
 # Run the binary
 ./jsr-mcp

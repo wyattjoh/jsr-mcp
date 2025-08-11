@@ -1,4 +1,3 @@
-import { load } from "@std/dotenv";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
@@ -1319,8 +1318,6 @@ const createServer = (config: JSRConfig) => {
  * @returns {Promise<void>}
  */
 export const startLocalServer = async (): Promise<void> => {
-  await load();
-
   const apiUrl = Deno.env.get("JSR_API_URL") || "https://api.jsr.io";
   const registryUrl = Deno.env.get("JSR_REGISTRY_URL") || "https://jsr.io";
   const apiToken = Deno.env.get("JSR_API_TOKEN");
