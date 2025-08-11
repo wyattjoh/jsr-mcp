@@ -1,5 +1,7 @@
 # @wyattjoh/jsr
 
+[![JSR](https://jsr.io/badges/@wyattjoh/jsr)](https://jsr.io/@wyattjoh/jsr) [![JSR Score](https://jsr.io/badges/@wyattjoh/jsr/score)](https://jsr.io/@wyattjoh/jsr) [![JSR Scope](https://jsr.io/badges/@wyattjoh)](https://jsr.io/@wyattjoh)
+
 A Deno library for interacting with the JSR (JavaScript Registry) API. This package provides a clean, type-safe API for searching packages, managing versions, and accessing registry metadata.
 
 ## Installation

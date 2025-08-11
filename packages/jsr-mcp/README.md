@@ -1,5 +1,7 @@
 # @wyattjoh/jsr-mcp
 
+[![JSR](https://jsr.io/badges/@wyattjoh/jsr-mcp)](https://jsr.io/@wyattjoh/jsr-mcp) [![JSR Score](https://jsr.io/badges/@wyattjoh/jsr-mcp/score)](https://jsr.io/@wyattjoh/jsr-mcp) [![JSR Scope](https://jsr.io/badges/@wyattjoh)](https://jsr.io/@wyattjoh)
+
 A Model Context Protocol (MCP) server that provides LLMs with access to the JSR (JavaScript Registry) API. This package enables AI assistants to search packages, manage versions, and interact with the JSR ecosystem.
 
 ## Installation
