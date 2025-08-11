@@ -84,9 +84,8 @@ async function makeApiRequest<T>(
     headers["Authorization"] = `Bearer ${config.apiToken}`;
   }
 
-  let response: Response | undefined;
   try {
-    response = await fetch(url, {
+    const response = await fetch(url, {
       ...options,
       headers,
     });
@@ -106,7 +105,6 @@ async function makeApiRequest<T>(
 
     return await response.json();
   } catch (error) {
-    await response?.body?.cancel();
     throw new Error(
       `JSR API request failed: ${
         error instanceof Error ? error.message : String(error)
