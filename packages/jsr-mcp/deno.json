@@ -11,8 +11,8 @@
     "build": "deno compile --allow-env=JSR_API_URL,JSR_REGISTRY_URL,JSR_API_TOKEN --allow-net=api.jsr.io,jsr.io --output=jsr-mcp mod.ts"
   },
   "imports": {
-    "@modelcontextprotocol/sdk": "npm:@modelcontextprotocol/sdk@^1.17.2",
-    "zod": "npm:zod@^4.0.17"
+    "@modelcontextprotocol/sdk": "npm:@modelcontextprotocol/sdk@^1.25.2",
+    "zod": "npm:zod@^4.3.5"
   },
   "repository": {
     "type": "git",

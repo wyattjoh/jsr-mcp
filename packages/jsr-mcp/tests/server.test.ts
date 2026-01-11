@@ -1,4 +1,4 @@
-import { assertEquals } from "jsr:@std/assert";
+import { assertEquals } from "jsr:@std/assert@1.0.13";
 import { createJSRConfig } from "@wyattjoh/jsr";
 
 // Since the server uses inline tool definitions, we'll test the server creation

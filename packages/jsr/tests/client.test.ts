@@ -3,7 +3,7 @@ import {
   assertExists,
   assertRejects,
   assertStringIncludes,
-} from "jsr:@std/assert";
+} from "jsr:@std/assert@1.0.13";
 import {
   createJSRConfig,
   getPackage,

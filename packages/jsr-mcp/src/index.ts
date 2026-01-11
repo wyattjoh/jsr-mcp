@@ -247,10 +247,6 @@ const createServer = (config: JSRConfig) => {
   const server = new McpServer({
     name: "jsr-mcp",
     version: deno.version,
-    capabilities: {
-      resources: {},
-      tools: {},
-    },
   });
 
   // Search and browse tools
